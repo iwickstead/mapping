@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Points on a map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id='map'></div>
+    <script>
+    // The value for 'accessToken' begins with 'pk...'
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaXdpY2tzdGVhZCIsImEiOiJja290eXB1djMwNWR6MndxZXBoOXJyajFyIn0.Iucbh7DBuMJwnAEFMzT_jw'; 
+    var map = new mapboxgl.Map({
+      container: 'map',
+      // Replace YOUR_STYLE_URL with your style URL.
+      style: 'mapbox://styles/iwickstead/ckr9oknj53dmw17qenp5v9kkr', 
+      center: [-71.11836, 42.376507],
+      zoom: 12
+    });
+
+    // Code from the next step will go here.
+/* 
+Add an event listener that runs
+  when a user clicks on the map element.
+*/
+map.on('click', function(e) {
+  // If the user clicked on one of your markers, get its information.
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['Artworks'] // replace with your layer name
+  });
+  if (!features.length) {
+    return;
+  }
+  var feature = features[0];
+
+  // Code from the next step will go here.
+/* 
+    Create a popup, specify its options 
+    and properties, and add it to the map.
+  */
+  var popup = new mapboxgl.Popup({ offset: [0, -15] })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(
+      '<h1>' + feature.properties.Artist_Ful + '</h1>' +
+      '<h2>' + feature.properties.List_Title + '</h2>'   +
+      '<h2>' + feature.properties.Art_Year + '</h2>'   +
+      '<h3>' + feature.properties.Object_Typ + '</h3>'   +
+      '<p>' + feature.properties.Location + '</p>'   +
+      '<p>' + feature.properties.Actual_Add + '</p>'   +
+      '<p>' + feature.properties.Additional + '</p>'
+      )
+    .addTo(map);
+
+});
+
+    </script>
+  </body>
+</html>
+
